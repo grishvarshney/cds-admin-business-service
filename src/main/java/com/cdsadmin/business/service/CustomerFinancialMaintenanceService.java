@@ -37,5 +37,13 @@ public class CustomerFinancialMaintenanceService {
 		customerFinancial = restTemplate.postForObject(dataHubEndpointProjects, customerFinancial, CustomerFinancial.class);
 		return customerFinancial;
 	}
+	
+	public Long deleteCustomerFinancial(Long customerFinancialId) {
+		String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customer-financials/"+customerFinancialId;
+		final RestTemplate restTemplate = new RestTemplate();
+		//return purposeType;
+		restTemplate.delete(dataHubEndpointProjects);
+		return customerFinancialId;
+	}
 
 }

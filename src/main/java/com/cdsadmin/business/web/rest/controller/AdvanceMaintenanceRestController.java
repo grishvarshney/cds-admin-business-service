@@ -36,8 +36,8 @@ public class AdvanceMaintenanceRestController {
 	
 	@RequestMapping(value = "/deletePurposeType", method = RequestMethod.DELETE)
 	@ResponseBody
-	public Long deletePurposeType(@RequestParam(required = false) Long purposeTypeId) {
-		return advanceMaintenanceService.deletePurposeType(purposeTypeId);
+	public Long deletePurposeType(@RequestParam(required = false) String purposeTypeId) {
+		return advanceMaintenanceService.deletePurposeType(Long.parseLong(purposeTypeId));
 		//return null;
 	}
 	
