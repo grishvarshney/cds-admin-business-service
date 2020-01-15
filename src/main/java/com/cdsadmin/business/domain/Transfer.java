@@ -26,6 +26,8 @@ public class Transfer {
     private ZonedDateTime timeStamp;
 
     private Set<Note> notes = new HashSet<>();
+    
+    private Set<Systems> systems = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -91,7 +93,15 @@ public class Transfer {
         this.notes = notes;
     }
 
-    @Override
+    public Set<Systems> getSystems() {
+		return systems;
+	}
+
+	public void setSystems(Set<Systems> systems) {
+		this.systems = systems;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

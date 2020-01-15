@@ -3,14 +3,12 @@ package com.cdsadmin.business.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.cdsadmin.business.domain.Merger;
 import com.cdsadmin.business.domain.Note;
+import com.cdsadmin.business.domain.Transfer;
 
-@Service
-public class MergerService {
+public class TransferService {
 	
 	public List<Note> getAllNotes(){
 		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/notes";
@@ -22,13 +20,14 @@ public class MergerService {
 		return notes;
 	}
 	
-	public Merger addMerger(Merger merger) {
+	public Transfer addTransfer(Transfer transfer) {
 		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/mergers";
 		final RestTemplate restTemplate = new RestTemplate();
 		//return purposeType;
-		final Merger json = restTemplate.postForObject(dataHubEndpointProjects, 
-				merger, Merger.class);
+		final Transfer json = restTemplate.postForObject(dataHubEndpointProjects, 
+				transfer, Transfer.class);
 		return json;
 	}
+
 
 }
