@@ -25,12 +25,12 @@ public class MergerService {
 
 
     public List<MergerNotes> searchMerger(String systemId, String customerId) {
-        String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/systems/" + systemId;
+        String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/systems/" + systemId;
 
         final Systems systems = restTemplate.getForObject(dataHubEndpointProjects,
             Systems.class);
         Long mergerId = 0L ;//systems.getMerger() == null ? null : systems.getMerger().getId();
-        dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/mergersByCustFromOrTo/" + customerId;
+        dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergersByCustFromOrTo/" + customerId;
 
         ResponseEntity<Merger[]> response = restTemplate.getForEntity(dataHubEndpointProjects, Merger[].class);
         Merger[] mergers = response.getBody();
@@ -45,18 +45,18 @@ public class MergerService {
         List<MergerNotes> mergerNotesList = new ArrayList<>();
         if (mergerList != null && !mergerList.isEmpty()) {
             for (Merger merger : mergerList) {
-                dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/getNotesByMerger/" + merger.getId();
+                dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/getNotesByMerger/" + merger.getId();
 
                 ResponseEntity<Note[]> responseNote = restTemplate.getForEntity(dataHubEndpointProjects, Note[].class);
                 Note[] notes = responseNote.getBody();
 
                 for (Note note : notes) {
                     MergerNotes ms = new MergerNotes();
-                    dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + merger.getCustomerFrom();
+                    dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers/" + merger.getCustomerFrom();
                     final Customer customerFr = restTemplate.getForObject(dataHubEndpointProjects,
                         Customer.class);
 
-                    dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + merger.getCustomerTo();
+                    dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers/" + merger.getCustomerTo();
                     final Customer customerT = restTemplate.getForObject(dataHubEndpointProjects,
                         Customer.class);
 
@@ -85,6 +85,18 @@ public class MergerService {
             List.class);
         return notes;
     }
+    
+    public List<Note> getNotesByCustomer(Long customerId){
+        //final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes";
+        final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/getNotesByCustomer/"+customerId;
+        final RestTemplate restTemplate = new RestTemplate();
+        List<Note> notes = new ArrayList<Note>();
+        notes = restTemplate.getForObject(
+            dataHubEndpointProjects,
+            List.class);
+        return notes;
+    }
+
 
     public List<Customer> getAllCustomers(){
         final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers";
@@ -97,15 +109,22 @@ public class MergerService {
     }
 
     public Merger addMerger(Merger merger) {
-        //final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
-        final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/mergers";
-        final RestTemplate restTemplate = new RestTemplate();
-        //return purposeType;
-        final Merger json = restTemplate.postForObject(dataHubEndpointProjects,
-            merger, Merger.class);
-        return json;
-    }
-
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
+		//final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
+		final RestTemplate restTemplate = new RestTemplate();
+		//return purposeType;
+		List<String> noteIds = merger.getNoteIds();
+		Set<Note> notes = new HashSet<>();
+		for(String noteId : noteIds) {
+			Note note = new Note();
+			note.setId(Long.parseLong(noteId));
+			notes.add(note);
+		}
+		merger.setNotes(notes);
+		final Merger json = restTemplate.postForObject(dataHubEndpointProjects, 
+				merger, Merger.class);
+		return json;
+	}
 
     public void undoMerger(List<String> mergerLists) {
         final RestTemplate restTemplate = new RestTemplate();
