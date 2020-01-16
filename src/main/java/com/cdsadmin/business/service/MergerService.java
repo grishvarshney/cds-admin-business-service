@@ -12,7 +12,7 @@ import com.cdsadmin.business.domain.Note;
 
 @Service
 public class MergerService {
-	
+
 	public List<Note> getAllNotes(){
 		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes";
 		final RestTemplate restTemplate = new RestTemplate();
@@ -32,15 +32,22 @@ public class MergerService {
 	            List.class);
 		return customers;
 	}
-	
+
 	public Merger addMerger(Merger merger) {
 		//final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
 		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/mergers";
 		final RestTemplate restTemplate = new RestTemplate();
 		//return purposeType;
-		final Merger json = restTemplate.postForObject(dataHubEndpointProjects, 
+		final Merger json = restTemplate.postForObject(dataHubEndpointProjects,
 				merger, Merger.class);
 		return json;
 	}
 
+    public void undoMerger(List<String> mergerLists) {
+        final RestTemplate restTemplate = new RestTemplate();
+	    for (final String merger: mergerLists) {
+            final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers/" + merger;
+            restTemplate.delete(dataHubEndpointProjects, Void.class);
+        }
+    }
 }
