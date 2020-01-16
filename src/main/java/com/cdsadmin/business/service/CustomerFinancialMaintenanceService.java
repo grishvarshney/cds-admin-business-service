@@ -14,7 +14,7 @@ public class CustomerFinancialMaintenanceService {
 	public List<CustomerFinancial> getAllCustomerFinancials() {
 		List<CustomerFinancial> customerFinancialList = new ArrayList<CustomerFinancial>();
 		//CustomerFinancialList customerFinancialList;
-		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customer-financials";
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customer-financials";
 		final RestTemplate restTemplate = new RestTemplate();
 		customerFinancialList = restTemplate.getForObject(
 	            dataHubEndpointProjects,
@@ -25,21 +25,21 @@ public class CustomerFinancialMaintenanceService {
     }
 	
 	public CustomerFinancial updateCustomerFinancial(CustomerFinancial customerFinancial) {
-		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customer-financials";
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customer-financials";
 		final RestTemplate restTemplate = new RestTemplate();
 		restTemplate.put(dataHubEndpointProjects, customerFinancial);
 		return customerFinancial;
 	}
 	
 	public CustomerFinancial addCustomerFinancial(CustomerFinancial customerFinancial) {
-		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customer-financials";
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customer-financials";
 		final RestTemplate restTemplate = new RestTemplate();
 		customerFinancial = restTemplate.postForObject(dataHubEndpointProjects, customerFinancial, CustomerFinancial.class);
 		return customerFinancial;
 	}
 	
 	public Long deleteCustomerFinancial(Long customerFinancialId) {
-		String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customer-financials/"+customerFinancialId;
+		String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customer-financials/"+customerFinancialId;
 		final RestTemplate restTemplate = new RestTemplate();
 		//return purposeType;
 		restTemplate.delete(dataHubEndpointProjects);

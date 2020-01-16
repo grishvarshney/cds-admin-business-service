@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cdsadmin.business.domain.Customer;
 import com.cdsadmin.business.domain.Note;
 import com.cdsadmin.business.domain.Transfer;
 import com.cdsadmin.business.service.TransferService;
@@ -27,6 +28,12 @@ public class TransferRestController {
 	@ResponseBody
 	public List<Note> getAllNotes() {
 		return transferService.getAllNotes();
+	}
+	
+	@RequestMapping(value = "/getAllCustomers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<Customer> getAllCustomers() {
+		return transferService.getAllCustomers();
 	}
 	
 	@RequestMapping(value = "/addMerger", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
