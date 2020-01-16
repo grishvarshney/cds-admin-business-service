@@ -27,9 +27,9 @@ public class Transfer {
 
     private Set<Note> notes = new HashSet<>();
     
-    private Set<Systems> systems = new HashSet<>();
+    private Systems systems;
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
@@ -92,12 +92,12 @@ public class Transfer {
     public void setNotes(Set<Note> notes) {
         this.notes = notes;
     }
-
-    public Set<Systems> getSystems() {
+    
+    public Systems getSystems() {
 		return systems;
 	}
 
-	public void setSystems(Set<Systems> systems) {
+	public void setSystems(Systems systems) {
 		this.systems = systems;
 	}
 
