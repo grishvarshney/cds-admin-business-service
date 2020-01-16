@@ -14,7 +14,7 @@ import com.google.gson.*;
 public class AdvanceMaintenanceService {
 	public List<PurposeType> getAllPurposeTypes(){
 		
-		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/purpose-types";
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/purpose-types";
 		final RestTemplate restTemplate = new RestTemplate();
 		final String json = restTemplate.getForObject(
 	            dataHubEndpointProjects,
@@ -57,7 +57,7 @@ public class AdvanceMaintenanceService {
 	}
 	
 	public PurposeType updatePurposeType(PurposeType purposeType) {
-		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/purpose-types";
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/purpose-types";
 		final RestTemplate restTemplate = new RestTemplate();
 		restTemplate.put(dataHubEndpointProjects, purposeType);
 		return purposeType;
@@ -67,7 +67,7 @@ public class AdvanceMaintenanceService {
 	}
 	
 	public Long deletePurposeType(Long purposeTypeId) {
-		String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/purpose-types/"+purposeTypeId;
+		String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/purpose-types/"+purposeTypeId;
 		final RestTemplate restTemplate = new RestTemplate();
 		//return purposeType;
 		restTemplate.delete(dataHubEndpointProjects);
@@ -75,7 +75,7 @@ public class AdvanceMaintenanceService {
 	}
 	
 	public PurposeType addPurposeType(PurposeType purposeType) {
-		final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/purpose-types";
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/purpose-types";
 		final RestTemplate restTemplate = new RestTemplate();
 		//return purposeType;
 		final PurposeType json = restTemplate.postForObject(dataHubEndpointProjects, 

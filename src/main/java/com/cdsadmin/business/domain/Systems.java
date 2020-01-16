@@ -1,5 +1,8 @@
 package com.cdsadmin.business.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * A Systems.
  */
@@ -8,6 +11,10 @@ public class Systems {
     private Long id;
 
     private String systemsEntity;
+    
+    private Set<Merger> mergers = new HashSet<>();
+
+    private Set<Transfer> transfers = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -25,7 +32,23 @@ public class Systems {
         this.systemsEntity = systemsEntity;
     }
 
-    @Override
+    public Set<Merger> getMergers() {
+		return mergers;
+	}
+
+	public void setMergers(Set<Merger> mergers) {
+		this.mergers = mergers;
+	}
+
+	public Set<Transfer> getTransfers() {
+		return transfers;
+	}
+
+	public void setTransfers(Set<Transfer> transfers) {
+		this.transfers = transfers;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -42,10 +65,8 @@ public class Systems {
     }
 
     @Override
-    public String toString() {
-        return "Systems{" +
-            "id=" + getId() +
-            ", systemsEntity='" + getSystemsEntity() + "'" +
-            "}";
-    }
+	public String toString() {
+		return "Systems [id=" + id + ", systemsEntity=" + systemsEntity + ", mergers=" + mergers + ", transfers="
+				+ transfers + "]";
+	}
 }
