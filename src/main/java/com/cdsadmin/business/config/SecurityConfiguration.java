@@ -27,8 +27,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.tokenProvider = tokenProvider;
         this.problemSupport = problemSupport;
     }
-
+    
     @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+    }
+    
+    /*@Override
     public void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http
@@ -61,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .apply(securityConfigurerAdapter());
         // @formatter:on
-    }
+    }*/
 
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
