@@ -11,10 +11,12 @@ public class Systems {
     private Long id;
 
     private String systemsEntity;
-    
+
     private Set<Merger> mergers = new HashSet<>();
 
     private Set<Transfer> transfers = new HashSet<>();
+
+
 
     public Long getId() {
         return id;
@@ -32,41 +34,23 @@ public class Systems {
         this.systemsEntity = systemsEntity;
     }
 
+
     public Set<Merger> getMergers() {
-		return mergers;
-	}
-
-	public void setMergers(Set<Merger> mergers) {
-		this.mergers = mergers;
-	}
-
-	public Set<Transfer> getTransfers() {
-		return transfers;
-	}
-
-	public void setTransfers(Set<Transfer> transfers) {
-		this.transfers = transfers;
-	}
-
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Systems)) {
-            return false;
-        }
-        return id != null && id.equals(((Systems) o).id);
+        return mergers;
     }
 
-    @Override
-    public int hashCode() {
-        return 31;
+    public void setMergers(Set<Merger> mergers) {
+        this.mergers = mergers;
     }
 
-    @Override
-	public String toString() {
-		return "Systems [id=" + id + ", systemsEntity=" + systemsEntity + ", mergers=" + mergers + ", transfers="
-				+ transfers + "]";
-	}
+    public Set<Transfer> getTransfers() {
+        return transfers;
+    }
+
+    public void setTransfers(Set<Transfer> transfers) {
+        this.transfers = transfers;
+    }
+
+
+
 }
