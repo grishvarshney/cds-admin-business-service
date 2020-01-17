@@ -35,13 +35,20 @@ public class MergerRestController {
     public List<Note> getAllNotes() {
         return mergerService.getAllNotes();
     }
-    
-    @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @RequestMapping(value = "/getNotesByCustomerTo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId) {
-        return mergerService.getNotesByCustomer(Long.parseLong(customerId));
+    public List<Note> getNotesByCustomerTo(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return mergerService.getNotesByCustomerTo(customerId, systemId);
     }
 
+    @RequestMapping(value = "/getNotesByCustomerFrom", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getNotesByCustomerFrom(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return mergerService.getNotesByCustomerFrom(customerId, systemId);
+    }
 
     @RequestMapping(value = "/getAllCustomers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

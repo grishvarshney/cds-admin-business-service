@@ -32,6 +32,12 @@ public class TransferRestController {
         return transferService.getAllCustomers();
     }
 
+    @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return transferService.getNotesByCustomer(customerId, systemId);
+    }
 
     @RequestMapping(value = "/addMerger", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
