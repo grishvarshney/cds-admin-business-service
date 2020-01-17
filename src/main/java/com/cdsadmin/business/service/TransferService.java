@@ -1,66 +1,107 @@
 package com.cdsadmin.business.service;
 
+import com.cdsadmin.business.domain.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import com.cdsadmin.business.domain.Customer;
-import com.cdsadmin.business.domain.Note;
-import com.cdsadmin.business.domain.Transfer;
-
 @Service
 public class TransferService {
 
-	public List<Note> getAllNotes(){
-		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes";
-		final RestTemplate restTemplate = new RestTemplate();
-		List<Note> notes = new ArrayList<Note>();
-		notes = restTemplate.getForObject(
-	            dataHubEndpointProjects,
-	            List.class);
-		return notes;
-	}
+    final RestTemplate restTemplate = new RestTemplate();
 
-	public List<Customer> getAllCustomers(){
-		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers";
-		final RestTemplate restTemplate = new RestTemplate();
-		List<Customer> customers = new ArrayList<Customer>();
-		customers = restTemplate.getForObject(
-	            dataHubEndpointProjects,
-	            List.class);
-		return customers;
-	}
-
-
-	public Transfer addTransfer(Transfer transfer) {
-		//final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
-		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
-		final RestTemplate restTemplate = new RestTemplate();
-		//return purposeType;
-		List<String> noteIds = transfer.getNoteIds();
-		Set<Note> notes = new HashSet<>();
-		for(String noteId : noteIds) {
-			Note note = new Note();
-			note.setId(Long.parseLong(noteId));
-			notes.add(note);
-		}
-		transfer.setNotes(notes);
-		final Transfer json = restTemplate.postForObject(dataHubEndpointProjects,
-				transfer, Transfer.class);
-		return json;
-	}
-
-	public void undoTransfer(List<String> transferIds) {
+    public List<Note> getAllNotes() {
+        final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes";
         final RestTemplate restTemplate = new RestTemplate();
-        for (final String transferId: transferIds) {
+        List<Note> notes = new ArrayList<Note>();
+        notes = restTemplate.getForObject(
+            dataHubEndpointProjects,
+            List.class);
+        return notes;
+    }
+
+    public List<Customer> getAllCustomers() {
+        final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers";
+        final RestTemplate restTemplate = new RestTemplate();
+        List<Customer> customers = new ArrayList<Customer>();
+        customers = restTemplate.getForObject(
+            dataHubEndpointProjects,
+            List.class);
+        return customers;
+    }
+
+
+    public Transfer addTransfer(Transfer transfer) {
+        //final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
+        final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
+        final RestTemplate restTemplate = new RestTemplate();
+        //return purposeType;
+        List<String> noteIds = transfer.getNoteIds();
+        Set<Note> notes = new HashSet<>();
+        for (String noteId : noteIds) {
+            Note note = new Note();
+            note.setId(Long.parseLong(noteId));
+            notes.add(note);
+        }
+        transfer.setNotes(notes);
+        final Transfer json = restTemplate.postForObject(dataHubEndpointProjects,
+            transfer, Transfer.class);
+        return json;
+    }
+
+    public void undoTransfer(List<String> transferIds) {
+        final RestTemplate restTemplate = new RestTemplate();
+        for (final String transferId : transferIds) {
             final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/transfers/" + transferId;
             restTemplate.delete(dataHubEndpointProjects, Void.class);
         }
     }
 
+    public List<TransferNotes> searchTransfer(String systemId, String customerId) {
+        String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/systems/" + systemId;
 
+        final Systems systems = restTemplate.getForObject(dataHubEndpointProjects,
+            Systems.class);
+        dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/transfersByCustFromOrTo/" + customerId + "/" + systems.getId();
+
+        ResponseEntity<Transfer[]> response = restTemplate.getForEntity(dataHubEndpointProjects, Transfer[].class);
+        Transfer[] transfers = response.getBody();
+
+        List<TransferNotes> transferNotesList = new ArrayList<>();
+        for (Transfer transfer : transfers) {
+            dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/getNotesByTransfer/" + transfer.getId();
+
+            ResponseEntity<Note[]> responseNote = restTemplate.getForEntity(dataHubEndpointProjects, Note[].class);
+            Note[] notes = responseNote.getBody();
+
+            for (Note note : notes) {
+                TransferNotes ms = new TransferNotes();
+                dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + transfer.getCustomerFrom();
+                final Customer customerFr = restTemplate.getForObject(dataHubEndpointProjects,
+                    Customer.class);
+
+                dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + transfer.getCustomerTo();
+                final Customer customerT = restTemplate.getForObject(dataHubEndpointProjects,
+                    Customer.class);
+
+                ms.setCustomerFrom(customerFr);
+                ms.setCustomerTo(customerT);
+                ms.setNoteNo(note.getNoteNo());
+                ms.setIndustry(note.getIndustry());
+                ms.setEffectiveDate(note.getEffectiveDate());
+                ms.setInstrumentType(note.getInstrumentType());
+                ms.setTransferId(transfer.getId());
+                transferNotesList.add(ms);
+
+            }
+
+        }
+
+        return transferNotesList;
+    }
 }

@@ -2,7 +2,7 @@ package com.cdsadmin.business.domain;
 
 import java.time.LocalDate;
 
-public class MergerNotes {
+public class TransferNotes {
 
     private Customer customerFrom;
 
@@ -16,15 +16,19 @@ public class MergerNotes {
 
     private String instrumentType;
 
-    private Long mergerId;
+    private Long transferId;
 
-    public Long getMergerId() {
-        return mergerId;
+    public Long getTransferId() {
+        return transferId;
     }
 
-    public void setMergerId(Long mergerId) {
-        this.mergerId = mergerId;
+    public void setTransferId(Long transferId) {
+        this.transferId = transferId;
     }
+
+
+
+
 
     public Customer getCustomerFrom() {
         return customerFrom;
