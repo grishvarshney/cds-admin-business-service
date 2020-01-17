@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,6 +25,8 @@ public class Transfer {
     private String transferringEntity;
 
     private ZonedDateTime timeStamp;
+    
+    private List<String> noteIds;
 
     private Set<Note> notes = new HashSet<>();
     
@@ -99,6 +102,14 @@ public class Transfer {
 
 	public void setSystems(Systems systems) {
 		this.systems = systems;
+	}
+
+	public List<String> getNoteIds() {
+		return noteIds;
+	}
+
+	public void setNoteIds(List<String> noteIds) {
+		this.noteIds = noteIds;
 	}
 
 	@Override

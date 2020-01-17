@@ -35,6 +35,12 @@ public class MergerRestController {
     public List<Note> getAllNotes() {
         return mergerService.getAllNotes();
     }
+    
+    @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId) {
+        return mergerService.getNotesByCustomer(Long.parseLong(customerId));
+    }
 
 
     @RequestMapping(value = "/getAllCustomers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
