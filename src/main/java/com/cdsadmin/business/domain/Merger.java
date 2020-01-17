@@ -3,6 +3,7 @@ package com.cdsadmin.business.domain;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,6 +24,8 @@ public class Merger {
     private String mergingEntity;
 
     private ZonedDateTime timeStamp;
+    
+    private List<String> noteIds;
 
     private Set<Note> notes = new HashSet<>();
     
@@ -98,6 +101,14 @@ public class Merger {
 
 	public void setSystems(Systems systems) {
 		this.systems = systems;
+	}
+
+	public List<String> getNoteIds() {
+		return noteIds;
+	}
+
+	public void setNoteIds(List<String> noteIds) {
+		this.noteIds = noteIds;
 	}
 
 	@Override

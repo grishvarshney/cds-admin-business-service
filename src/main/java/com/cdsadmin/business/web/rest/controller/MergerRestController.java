@@ -2,9 +2,13 @@ package com.cdsadmin.business.web.rest.controller;
 
 import java.util.List;
 
+
+import com.cdsadmin.business.domain.MergerNotes;
+
 import com.cdsadmin.business.domain.MergersWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,31 +22,50 @@ import com.cdsadmin.business.service.MergerService;
 @RequestMapping("/merger")
 @CrossOrigin(origins = "*")
 public class MergerRestController {
+
     // Logger instance
     private static final Logger logger = LoggerFactory.getLogger(MergerRestController.class);
 
-	@Autowired
-	MergerService mergerService;
 
-	@RequestMapping(value = "/getAllNotes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public List<Note> getAllNotes() {
-		return mergerService.getAllNotes();
-	}
-	
-	@RequestMapping(value = "/getAllCustomers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public List<Customer> getAllCustomers() {
-		return mergerService.getAllCustomers();
-	}
-	
+    @Autowired
+    MergerService mergerService;
 
-	@RequestMapping(value = "/addMerger", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public String addMerger(@RequestBody Merger merger) {
-		mergerService.addMerger(merger);
-		return "success";
-	}
+    @RequestMapping(value = "/getAllNotes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getAllNotes() {
+        return mergerService.getAllNotes();
+    }
+    
+    @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return mergerService.getNotesByCustomer(customerId, systemId);
+    }
+
+
+    @RequestMapping(value = "/getAllCustomers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Customer> getAllCustomers() {
+        return mergerService.getAllCustomers();
+    }
+
+
+    @RequestMapping(value = "/addMerger", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String addMerger(@RequestBody Merger merger) {
+        mergerService.addMerger(merger);
+        return "success";
+    }
+
+
+    @GetMapping(value = "/searchMerger/{systemId}/{customerId}")
+    public  List<MergerNotes>  searchMerger(@PathVariable("systemId") String systemId ,
+                                            @PathVariable("customerId") String customerId) {
+        List<MergerNotes>  ln = mergerService.searchMerger(systemId, customerId);
+        return ln;
+    }
+
 
     @RequestMapping(value = "/undoMerger", method = RequestMethod.DELETE)
     public void undoMerger(@RequestBody MergersWrapper mergersWrapper) {
@@ -70,4 +93,5 @@ public class MergerRestController {
             logger.debug("End Undo Merger");
         }
     }
+
 }
