@@ -31,6 +31,20 @@ public class TransferRestController {
     public List<Customer> getAllCustomers() {
         return transferService.getAllCustomers();
     }
+    
+    @RequestMapping(value = "/getNotesByCustomerTo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getNotesByCustomerTo(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return transferService.getNotesByCustomerTo(customerId, systemId);
+    }
+
+    @RequestMapping(value = "/getNotesByCustomerFrom", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getNotesByCustomerFrom(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return transferService.getNotesByCustomerFrom(customerId, systemId);
+    }
 
     @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -39,7 +53,7 @@ public class TransferRestController {
         return transferService.getNotesByCustomer(customerId, systemId);
     }
 
-    @RequestMapping(value = "/addMerger", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/addTransfer", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String addTransfer(@RequestBody Transfer transfer) {
         transferService.addTransfer(transfer);
