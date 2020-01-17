@@ -19,29 +19,29 @@ public class MergerService {
 
 
     public List<MergerNotes> searchMerger(String systemId, String customerId) {
-        String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/systems/" + systemId;
+        String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/systems/" + systemId;
 
         final Systems systems = restTemplate.getForObject(dataHubEndpointProjects,
             Systems.class);
-        dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/mergersByCustFromOrTo/" + customerId + "/" + systems.getId();
+        dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergersByCustFromOrTo/" + customerId + "/" + systems.getId();
 
         ResponseEntity<Merger[]> response = restTemplate.getForEntity(dataHubEndpointProjects, Merger[].class);
         Merger[] mergers = response.getBody();
 
         List<MergerNotes> mergerNotesList = new ArrayList<>();
         for (Merger merger : mergers) {
-            dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/getNotesByMerger/" + merger.getId();
+            dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/getNotesByMerger/" + merger.getId();
 
             ResponseEntity<Note[]> responseNote = restTemplate.getForEntity(dataHubEndpointProjects, Note[].class);
             Note[] notes = responseNote.getBody();
 
             for (Note note : notes) {
                 MergerNotes ms = new MergerNotes();
-                dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + merger.getCustomerFrom();
+                dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers/" + merger.getCustomerFrom();
                 final Customer customerFr = restTemplate.getForObject(dataHubEndpointProjects,
                     Customer.class);
 
-                dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + merger.getCustomerTo();
+                dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers/" + merger.getCustomerTo();
                 final Customer customerT = restTemplate.getForObject(dataHubEndpointProjects,
                     Customer.class);
 
@@ -73,7 +73,7 @@ public class MergerService {
 
     public List<Note> getNotesByCustomer(Long customerId) {
         //final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes";
-        final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/getNotesByCustomer/" + customerId;
+        final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/getNotesByCustomer/" + customerId;
         final RestTemplate restTemplate = new RestTemplate();
         List<Note> notes = new ArrayList<Note>();
         notes = restTemplate.getForObject(
