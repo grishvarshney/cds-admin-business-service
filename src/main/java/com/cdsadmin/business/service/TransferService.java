@@ -24,6 +24,17 @@ public class TransferService {
 	            List.class);
 		return notes;
 	}
+	
+    public List<Note> getNotesByCustomer(String customerId, String systemId){
+        //final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes";
+        final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/getNotesByCustomer/"+customerId+"/"+systemId;
+        final RestTemplate restTemplate = new RestTemplate();
+        List<Note> notes = new ArrayList<Note>();
+        notes = restTemplate.getForObject(
+            dataHubEndpointProjects,
+            List.class);
+        return notes;
+    }
 
 	public List<Customer> getAllCustomers(){
 		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers";
