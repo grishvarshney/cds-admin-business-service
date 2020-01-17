@@ -38,8 +38,9 @@ public class MergerRestController {
     
     @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId) {
-        return mergerService.getNotesByCustomer(Long.parseLong(customerId));
+    public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return mergerService.getNotesByCustomer(customerId, systemId);
     }
 
 

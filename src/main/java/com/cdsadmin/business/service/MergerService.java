@@ -37,7 +37,7 @@ public class MergerService {
 
     public List<MergerNotes> searchMerger(String systemId, String customerId) {
 
-        String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/systems/" + systemId;
+        String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/systems/" + systemId;
 
 
 
@@ -45,7 +45,7 @@ public class MergerService {
 
             Systems.class);
 
-        dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/mergersByCustFromOrTo/" + customerId + "/" + systems.getId();
+        dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergersByCustFromOrTo/" + customerId + "/" + systems.getId();
 
 
 
@@ -59,7 +59,7 @@ public class MergerService {
 
         for (Merger merger : mergers) {
 
-            dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/getNotesByMerger/" + merger.getId();
+            dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/getNotesByMerger/" + merger.getId();
 
 
 
@@ -73,7 +73,7 @@ public class MergerService {
 
                 MergerNotes ms = new MergerNotes();
 
-                dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + merger.getCustomerFrom();
+                dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers/" + merger.getCustomerFrom();
 
                 final Customer customerFr = restTemplate.getForObject(dataHubEndpointProjects,
 
@@ -81,7 +81,7 @@ public class MergerService {
 
 
 
-                dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/customers/" + merger.getCustomerTo();
+                dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers/" + merger.getCustomerTo();
 
                 final Customer customerT = restTemplate.getForObject(dataHubEndpointProjects,
 
@@ -129,9 +129,9 @@ public class MergerService {
         return notes;
     }
     
-    public List<Note> getNotesByCustomer(Long customerId){
+    public List<Note> getNotesByCustomer(String customerId, String systemId){
         //final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes";
-        final String dataHubEndpointProjects = "http://localhost:8081/services/cdsdataservice/api/getNotesByCustomer/"+customerId;
+        final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/getNotesByCustomer/"+customerId+"/"+systemId;
         final RestTemplate restTemplate = new RestTemplate();
         List<Note> notes = new ArrayList<Note>();
         notes = restTemplate.getForObject(
@@ -140,32 +140,21 @@ public class MergerService {
         return notes;
     }
 
-
-
-
     public List<Customer> getAllCustomers() {
-
         final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/customers";
-
         final RestTemplate restTemplate = new RestTemplate();
-
         List<Customer> customers = new ArrayList<Customer>();
-
         customers = restTemplate.getForObject(
-
             dataHubEndpointProjects,
-
             List.class);
-
         return customers;
-
     }
 
 
 
     public Merger addMerger(Merger merger) {
-		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
 		//final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
+		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
 		final RestTemplate restTemplate = new RestTemplate();
 		//return purposeType;
 		List<String> noteIds = merger.getNoteIds();
@@ -180,23 +169,11 @@ public class MergerService {
 				merger, Merger.class);
 		return json;
 	}
-
-
-
-
-
     public void undoMerger(List<String> mergerLists) {
-
         final RestTemplate restTemplate = new RestTemplate();
-
         for (final String merger : mergerLists) {
-
             final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers/" + merger;
-
             restTemplate.delete(dataHubEndpointProjects, Void.class);
-
         }
-
     }
-
 }
