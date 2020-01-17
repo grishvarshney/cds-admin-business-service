@@ -35,7 +35,7 @@ public class TransferRestController {
     @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId,
-    		@RequestParam(required = true) String systemId) {
+                                         @RequestParam(required = true) String systemId) {
         return transferService.getNotesByCustomer(customerId, systemId);
     }
 
@@ -47,11 +47,11 @@ public class TransferRestController {
     }
 
     @RequestMapping(value = "/undoTransfer", method = RequestMethod.DELETE)
-    public void undoMerger(@RequestBody TransferWrapper transferWrapper) {
+    public void undoMerger(@RequestBody TransferListWrapper transferListWrapper) {
         int version = 1;
         if (logger.isDebugEnabled()) {
-            logger.debug("Undoing the Merger");
-            logger.debug("data: '" + transferWrapper + "'");
+            logger.debug("Undoing the Transfer");
+            logger.debug("data: '" + transferListWrapper + "'");
         }
 
         try {
@@ -59,7 +59,7 @@ public class TransferRestController {
                 case 1:
                     if (logger.isDebugEnabled())
                         logger.debug("In version 1");
-                    transferService.undoTransfer(transferWrapper.getTransferList());
+                    transferService.undoTransfer(transferListWrapper.getTransferList());
                     break;
                 default:
                     throw new Exception("Unsupported version: " + version);
@@ -69,7 +69,7 @@ public class TransferRestController {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("End Undo Merger");
+            logger.debug("End Undo Transfer");
         }
     }
 
@@ -79,6 +79,5 @@ public class TransferRestController {
         List<TransferNotes> ln = transferService.searchTransfer(systemId, customerId);
         return ln;
     }
-
-
+    
 }

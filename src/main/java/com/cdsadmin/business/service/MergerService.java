@@ -107,7 +107,7 @@ public class MergerService {
 
     public Merger addMerger(Merger merger) {
         //final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
-		final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
+        final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers";
         final RestTemplate restTemplate = new RestTemplate();
         //return purposeType;
         List<String> noteIds = merger.getNoteIds();
@@ -123,11 +123,16 @@ public class MergerService {
         return json;
     }
 
-    public void undoMerger(List<String> mergerLists) {
+    public void undoMerger(List<MergersWrapper> mergerLists) {
         final RestTemplate restTemplate = new RestTemplate();
-        for (final String merger : mergerLists) {
-            final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/mergers/" + merger;
-            restTemplate.delete(dataHubEndpointProjects, Void.class);
+        for (final MergersWrapper merger : mergerLists) {
+            final String dataHubNotesEndpoint = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes/" + Long.parseLong(merger.getNoteId());
+            final String dataHubNoteUpdateEndpoint = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes/";
+            final Note note = restTemplate.getForObject(dataHubNotesEndpoint, Note.class);
+            if (note.getId() == Long.parseLong(merger.getNoteId())) {
+                note.setMerger(null);
+                restTemplate.put(dataHubNoteUpdateEndpoint, note);
+            }
         }
     }
 }

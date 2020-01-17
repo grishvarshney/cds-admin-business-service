@@ -65,14 +65,6 @@ public class TransferService {
         return json;
     }
 
-    public void undoTransfer(List<String> transferIds) {
-        final RestTemplate restTemplate = new RestTemplate();
-        for (final String transferId : transferIds) {
-            final String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/transfers/" + transferId;
-            restTemplate.delete(dataHubEndpointProjects, Void.class);
-        }
-    }
-
     public List<TransferNotes> searchTransfer(String systemId, String customerId) {
         String dataHubEndpointProjects = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/systems/" + systemId;
 
@@ -115,5 +107,18 @@ public class TransferService {
         }
 
         return transferNotesList;
+    }
+
+	public void undoTransfer(List<TransferWrapper> transferList) {
+        final RestTemplate restTemplate = new RestTemplate();
+        for (final TransferWrapper transferWrapper : transferList) {
+            final String dataHubNotesEndpoint = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes/" + Long.parseLong(transferWrapper.getNoteId());
+            final String dataHubNoteUpdateEndpoint = "http://cds-admin-dataservice-dev.pj7ps6ybg9.us-east-1.elasticbeanstalk.com/services/cdsdataservice/api/notes/";
+            final Note note = restTemplate.getForObject(dataHubNotesEndpoint, Note.class);
+            if (note.getId() == Long.parseLong(transferWrapper.getNoteId())) {
+                note.setTransfer(null);
+                restTemplate.put(dataHubNoteUpdateEndpoint, note);
+            }
+        }
     }
 }
