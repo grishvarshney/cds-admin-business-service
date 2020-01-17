@@ -3,9 +3,8 @@ package com.cdsadmin.business.web.rest.controller;
 import java.util.List;
 
 
-import com.cdsadmin.business.domain.MergerNotes;
+import com.cdsadmin.business.domain.*;
 
-import com.cdsadmin.business.domain.MergersWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import com.cdsadmin.business.domain.Customer;
-import com.cdsadmin.business.domain.Merger;
-import com.cdsadmin.business.domain.Note;
 import com.cdsadmin.business.service.MergerService;
 
 @RestController
@@ -35,14 +31,20 @@ public class MergerRestController {
     public List<Note> getAllNotes() {
         return mergerService.getAllNotes();
     }
-    
-    @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @RequestMapping(value = "/getNotesByCustomerTo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId,
+    public List<Note> getNotesByCustomerTo(@RequestParam(required = true) String customerId,
     		@RequestParam(required = true) String systemId) {
-        return mergerService.getNotesByCustomer(customerId, systemId);
+        return mergerService.getNotesByCustomerTo(customerId, systemId);
     }
 
+    @RequestMapping(value = "/getNotesByCustomerFrom", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Note> getNotesByCustomerFrom(@RequestParam(required = true) String customerId,
+    		@RequestParam(required = true) String systemId) {
+        return mergerService.getNotesByCustomerFrom(customerId, systemId);
+    }
 
     @RequestMapping(value = "/getAllCustomers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -68,11 +70,11 @@ public class MergerRestController {
 
 
     @RequestMapping(value = "/undoMerger", method = RequestMethod.DELETE)
-    public void undoMerger(@RequestBody MergersWrapper mergersWrapper) {
+    public void undoMerger(@RequestBody MergersListWrapper mergersListWrapper) {
         int version = 1;
         if (logger.isDebugEnabled()) {
             logger.debug("Undoing the Merger");
-            logger.debug("data: '" + mergersWrapper + "'");
+            logger.debug("data: '" + mergersListWrapper + "'");
         }
 
         try {
@@ -80,7 +82,7 @@ public class MergerRestController {
                 case 1:
                     if (logger.isDebugEnabled())
                         logger.debug("In version 1");
-                    mergerService.undoMerger(mergersWrapper.getMergerList());
+                    mergerService.undoMerger(mergersListWrapper.getMergerList());
                     break;
                 default:
                     throw new Exception("Unsupported version: " + version);
