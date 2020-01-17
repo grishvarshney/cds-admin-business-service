@@ -2,7 +2,7 @@ package com.cdsadmin.business.web.rest.controller;
 
 import java.util.List;
 
-import com.cdsadmin.business.domain.TransferWrapper;
+import com.cdsadmin.business.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cdsadmin.business.domain.Customer;
-import com.cdsadmin.business.domain.Note;
-import com.cdsadmin.business.domain.Transfer;
 import com.cdsadmin.business.service.TransferService;
 
 @RestController
@@ -35,13 +32,13 @@ public class TransferRestController {
 	public List<Note> getAllNotes() {
 		return transferService.getAllNotes();
 	}
-	
+
 	@RequestMapping(value = "/getAllCustomers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Customer> getAllCustomers() {
 		return transferService.getAllCustomers();
 	}
-	
+
     @RequestMapping(value = "/getNotesByCustomer", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Note> getNotesByCustomer(@RequestParam(required = true) String customerId,
@@ -57,11 +54,11 @@ public class TransferRestController {
 	}
 
     @RequestMapping(value = "/undoTransfer", method = RequestMethod.DELETE)
-    public void undoMerger(@RequestBody TransferWrapper transferWrapper) {
+    public void undoMerger(@RequestBody TransferListWrapper transferListWrapper) {
         int version = 1;
         if (logger.isDebugEnabled()) {
-            logger.debug("Undoing the Merger");
-            logger.debug("data: '" + transferWrapper + "'");
+            logger.debug("Undoing the Transfer");
+            logger.debug("data: '" + transferListWrapper + "'");
         }
 
         try {
@@ -69,7 +66,7 @@ public class TransferRestController {
                 case 1:
                     if (logger.isDebugEnabled())
                         logger.debug("In version 1");
-                    transferService.undoTransfer(transferWrapper.getTransferList());
+                    transferService.undoTransfer(transferListWrapper.getTransferList());
                     break;
                 default:
                     throw new Exception("Unsupported version: " + version);
@@ -79,7 +76,7 @@ public class TransferRestController {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("End Undo Merger");
+            logger.debug("End Undo Transfer");
         }
     }
 

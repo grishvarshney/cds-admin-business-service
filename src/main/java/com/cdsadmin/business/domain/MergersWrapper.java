@@ -1,15 +1,22 @@
 package com.cdsadmin.business.domain;
 
-import java.util.List;
-
 public class MergersWrapper {
-    List<String> mergerList;
+    String noteId;
+    String mergerId;
 
-    public List<String> getMergerList() {
-        return mergerList;
+    public String getNoteId() {
+        return noteId;
     }
 
-    public void setMergerList(List<String> mergerList) {
-        this.mergerList = mergerList;
+    public void setNoteId(String noteId) {
+        this.noteId = noteId;
+    }
+
+    public String getMergerId() {
+        return mergerId;
+    }
+
+    public void setMergerId(String mergerId) {
+        this.mergerId = mergerId;
     }
 }
