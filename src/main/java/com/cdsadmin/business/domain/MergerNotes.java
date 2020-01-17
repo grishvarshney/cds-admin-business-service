@@ -18,6 +18,17 @@ public class MergerNotes {
 
     private Long mergerId;
 
+    private Long noteId;
+
+    public Long getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(Long noteId) {
+        this.noteId = noteId;
+    }
+
+
     public Long getMergerId() {
         return mergerId;
     }

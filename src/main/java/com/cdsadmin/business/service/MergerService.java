@@ -52,6 +52,7 @@ public class MergerService {
                 ms.setEffectiveDate(note.getEffectiveDate());
                 ms.setInstrumentType(note.getInstrumentType());
                 ms.setMergerId(merger.getId());
+                ms.setNoteId(note.getId());
                 mergerNotesList.add(ms);
 
             }

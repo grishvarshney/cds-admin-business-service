@@ -107,6 +107,7 @@ public class TransferService {
                 ms.setEffectiveDate(note.getEffectiveDate());
                 ms.setInstrumentType(note.getInstrumentType());
                 ms.setTransferId(transfer.getId());
+                ms.setNoteId(note.getId());
                 transferNotesList.add(ms);
 
             }
